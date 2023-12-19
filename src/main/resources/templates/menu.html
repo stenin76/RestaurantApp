@@ -1,402 +1,263 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Restaurant</title>
+    <link rel="stylesheet" href="/css/reset-css.css"/>
     <link rel="stylesheet" href="/css/bootstrap.css"/>
     <link rel="stylesheet" href="/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/css/style.css"/>
     <link rel="stylesheet" href="/css/responsive.css"/>
-
 </head>
 
 <body>
 
 <!-- header section starts -->
-<header class="header_section">
-    <div class="container">
-        <nav class="navbar navbar-expand-lg custom_nav-container ">
-            <a class="navbar-brand" href="index.html">
-            <span>
-        <h4>
-              Food for Home
-        </h4>
-            </span>
-            </a>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav  mx-auto ">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/menu">Menu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.html">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.html">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.html">Register</a>
-                    </li>
-                    <div class="user_option">
-                        <a href="order.html" class="order_online">
-                            Order Online
+<div class="fixed-top">
+    <header class="header_section">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg custom_nav-container ">
+                <a class="navbar-brand" href="/index">
+                <span>
+                    <h4>
+                     Food for Home***
+                    </h4>
+                </span>
+                </a>
+                <div class="nav-item" sec:authorize="isAuthenticated()">
+                    Welcome,
+                    <th:block sec:authentication="name"></th:block>
+                    !
+                </div>
+                <div class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:method="post"
+                          th:action="@{/logout}">
+                        <input type="submit" class="btn btn-link" value="Logout"/>
+                    </form>
+                </div>
+                <div class="nav-item" sec:authorize="!isAuthenticated()">
+                    Register and order online!
+                </div>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav  mx-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/menu">Menu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about">About</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="!isAuthenticated()">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="!isAuthenticated()">
+                            <a class="nav-link" href="/register">Register</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <div class="dropdown" sec:authorize="hasRole('ADMIN')">
+                                <a class="btn btn-secondary dropdown-toggle" role="button" data-bs-toggle="dropdown">
+                                    ADMIN
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" href="/product-add">Add Product</a>
+                                    <a class="dropdown-item" href="/product-panel">Products Panel</a>
+                                    <a class="dropdown-item" href="/users-panel">Users Panel</a>
+                                    <a class="dropdown-item" href="/order-panel">Orders Panel</a>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="user_option" sec:authorize="isAuthenticated()">
+                        <a href="/profile" class="order_online">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                            </svg>
                         </a>
                     </div>
-                </ul>
-            </div>
-        </nav>
-    </div>
-</header>
-
+                    <div class="user_option" sec:authorize="isAuthenticated()">
+                        <a href="/shoppingCart" class="order_online">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                 fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                            <i class="bi bi-cart"></i>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+</div>
 <!-- end header section -->
 
-<!-- burger menu section -->
+<main>
+    <section class="h-100" style="background-color: #eee;">
+        <div class="container h-100 py-5">
+            <!-- burger menu section -->
+            <section class="food_section layout_padding">
+                <div class="container">
+                    <div class="heading_container heading_center">
+                        <h2>
+                            Burger
+                        </h2>
+                    </div>
+                    <div class="filters-content">
+                        <div class="row grid">
+                            <div th:each="burgerProducts : ${burgerProducts}" class="col-sm-6 col-lg-4 all burger">
+                                <div class="box">
+                                    <div>
+                                        <tr>
+                                            <td class="bg-info">
+                                            </td>
+                                            <div class="img-box">
+                                                <img th:src="${'/images/' + burgerProducts.imageUrl}" alt="">
+                                            </div>
+                                            <div class="detail-box">
+                                                <h5>
+                                                    <td th:text="|*{burgerProducts.name}|"></td>
+                                                </h5>
+                                                <p>
+                                                    <td th:text="|*{burgerProducts.description}|"></td>
+                                                </p>
 
-<section class="food_section layout_padding">
-    <div class="container">
-        <div class="heading_container heading_center">
-            <h2>
-                Burger
-            </h2>
+                                                <div class="options">
+                                                    <h6>
+                                                        <td th:text="|${#numbers.formatDecimal(burgerProducts.price, 1, 2, 'POINT')} €|"
+                                                            class="bg-primary" style="width: 20%"></td>
+                                                    </h6>
+                                                    <a th:href="@{/shoppingCart/addProduct/{id}(id=*{burgerProducts.id})}" sec:authorize="isAuthenticated()">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                                        </svg>
+                                                        <i class="bi bi-cart"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- end burger menu section -->
+
+            <!-- pizza menu section -->
+            <section class="food_section layout_padding">
+                <div class="container">
+                    <div class="heading_container heading_center">
+                        <h2>
+                            Pizza
+                        </h2>
+                    </div>
+                    <div class="filters-content">
+                        <div class="row grid">
+                            <div th:each="pizzaProducts : ${pizzaProducts}" class="col-sm-6 col-lg-4 all pizza">
+                                <div class="box">
+                                    <div>
+                                        <tr>
+                                            <td class="bg-info">
+                                            </td>
+                                            <div class="img-box">
+                                                <img th:src="${'/images/' + pizzaProducts.imageUrl}" alt="">
+                                            </div>
+                                            <div class="detail-box">
+                                                <h5>
+                                                    <td th:text="|*{pizzaProducts.name}|"></td>
+                                                </h5>
+                                                <p>
+                                                    <td th:text="|*{pizzaProducts.description}|"></td>
+                                                </p>
+
+                                                <div class="options">
+                                                    <h6>
+                                                        <td th:text="|${#numbers.formatDecimal(pizzaProducts.price, 1, 2, 'POINT')} €|"
+                                                            class="bg-primary" style="width: 20%"></td>
+                                                    </h6>
+                                                    <a th:href="@{/shoppingCart/addProduct/{id}(id=*{pizzaProducts.id})}" sec:authorize="isAuthenticated()">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                                        </svg>
+                                                        <i class="bi bi-cart"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <!-- end pizza menu section -->
+
+            <!-- pasta menu section -->
+            <section class="food_section layout_padding">
+                <div class="container">
+                    <div class="heading_container heading_center">
+                        <h2>
+                            Pasta
+                        </h2>
+                    </div>
+
+                    <div class="filters-content">
+                        <div class="row grid">
+                            <div th:each="pastaProducts : ${pastaProducts}" class="col-sm-6 col-lg-4 all pasta">
+                                <div class="box">
+                                    <div>
+                                        <tr>
+                                            <td class="bg-info">
+                                            </td>
+                                            <div class="img-box">
+                                                <img th:src="${'/images/' + pastaProducts.imageUrl}" alt="">
+                                            </div>
+                                            <div class="detail-box">
+                                                <h5>
+                                                    <td th:text="|*{pastaProducts.name}|"></td>
+                                                </h5>
+                                                <p>
+                                                    <td th:text="|*{pastaProducts.description}|"></td>
+                                                </p>
+
+                                                <div class="options">
+                                                    <h6>
+                                                        <td th:text="|${#numbers.formatDecimal(pastaProducts.price, 1, 2, 'POINT')} €|"
+                                                            class="bg-primary" style="width: 20%"></td>
+
+                                                    </h6>
+                                                    <a th:href="@{/shoppingCart/addProduct/{id}(id=*{pastaProducts.id})}" sec:authorize="isAuthenticated()">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                                        </svg>
+                                                        <i class="bi bi-cart"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- end pasta menu section -->
         </div>
-
-        <div class="filters-content">
-            <div class="row grid">
-                <div class="col-sm-6 col-lg-4 all pizza">
-                    <div class="box">
-                        <div>
-                            <div class="img-box">
-                                <img src="images/burger-1.jpg" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h5>
-                                    Delicious Burger1
-                                </h5>
-                                <p>
-                                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam
-                                    voluptatem repellendus sed eaque
-                                </p>
-                                <div class="options">
-                                    <h6>
-                                        $20
-                                    </h6>
-                                    <a href="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                        </svg>
-                                        <i class="bi bi-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4 all burger">
-                    <div class="box">
-                        <div>
-                            <div class="img-box">
-                                <img src="images/burger-2.jpg" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h5>
-                                    Delicious Burger2
-                                </h5>
-                                <p>
-                                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam
-                                    voluptatem repellendus sed eaque
-                                </p>
-                                <div class="options">
-                                    <h6>
-                                        $15
-                                    </h6>
-                                    <a href="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                        </svg>
-                                        <i class="bi bi-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4 all pizza">
-                    <div class="box">
-                        <div>
-                            <div class="img-box">
-                                <img src="images/burger-3.jpg" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h5>
-                                    Delicious Burger3
-                                </h5>
-                                <p>
-                                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam
-                                    voluptatem repellendus sed eaque
-                                </p>
-                                <div class="options">
-                                    <h6>
-                                        $17
-                                    </h6>
-                                    <a href="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                        </svg>
-                                        <i class="bi bi-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- end burger menu section -->
-
-<!-- pizza menu section -->
-
-<section class="food_section layout_padding">
-    <div class="container">
-        <div class="heading_container heading_center">
-            <h2>
-                Pizza
-            </h2>
-        </div>
-
-        <div class="filters-content">
-            <div class="row grid">
-                <div class="col-sm-6 col-lg-4 all pizza">
-                    <div class="box">
-                        <div>
-                            <div class="img-box">
-                                <img src="images/pizza-1.jpg" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h5>
-                                    Delicious Pizza1
-                                </h5>
-                                <p>
-                                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam
-                                    voluptatem repellendus sed eaque
-                                </p>
-                                <div class="options">
-                                    <h6>
-                                        $20
-                                    </h6>
-                                    <a href="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                        </svg>
-                                        <i class="bi bi-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4 all burger">
-                    <div class="box">
-                        <div>
-                            <div class="img-box">
-                                <img src="images/pizza-2.jpg" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h5>
-                                    Delicious Pizza2
-                                </h5>
-                                <p>
-                                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam
-                                    voluptatem repellendus sed eaque
-                                </p>
-                                <div class="options">
-                                    <h6>
-                                        $15
-                                    </h6>
-                                    <a href="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                        </svg>
-                                        <i class="bi bi-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4 all pizza">
-                    <div class="box">
-                        <div>
-                            <div class="img-box">
-                                <img src="images/pizza-3.jpg" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h5>
-                                    Delicious Pizza3
-                                </h5>
-                                <p>
-                                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam
-                                    voluptatem repellendus sed eaque
-                                </p>
-                                <div class="options">
-                                    <h6>
-                                        $17
-                                    </h6>
-                                    <a href="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                        </svg>
-                                        <i class="bi bi-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- end pizza menu section -->
-
-<!-- pasta menu section -->
-
-<section class="food_section layout_padding">
-    <div class="container">
-        <div class="heading_container heading_center">
-            <h2>
-                Pasta
-            </h2>
-        </div>
-
-        <div class="filters-content">
-            <div class="row grid">
-                <div class="col-sm-6 col-lg-4 all pizza">
-                    <div class="box">
-                        <div>
-                            <div class="img-box">
-                                <img src="images/pasta-1.jpg" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h5>
-                                    Delicious Pasta1
-                                </h5>
-                                <p>
-                                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam
-                                    voluptatem repellendus sed eaque
-                                </p>
-                                <div class="options">
-                                    <h6>
-                                        $20
-                                    </h6>
-                                    <a href="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                        </svg>
-                                        <i class="bi bi-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4 all burger">
-                    <div class="box">
-                        <div>
-                            <div class="img-box">
-                                <img src="images/pasta-2.jpg" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h5>
-                                    Delicious Pasta2
-                                </h5>
-                                <p>
-                                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam
-                                    voluptatem repellendus sed eaque
-                                </p>
-                                <div class="options">
-                                    <h6>
-                                        $15
-                                    </h6>
-                                    <a href="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                        </svg>
-                                        <i class="bi bi-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-lg-4 all pizza">
-                    <div class="box">
-                        <div>
-                            <div class="img-box">
-                                <img src="images/pasta-3.jpg" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h5>
-                                    Delicious Pasta3
-                                </h5>
-                                <p>
-                                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam
-                                    voluptatem repellendus sed eaque
-                                </p>
-                                <div class="options">
-                                    <h6>
-                                        $17
-                                    </h6>
-                                    <a href="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-                                        </svg>
-                                        <i class="bi bi-cart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div><x></x>
-    </div>
-</section>
-
-<!-- end pasta menu section -->
-
-<section class="food_section layout_padding">
-    <div class="container">
-        <div class="btn-box">
-            <a href="">
-                Complete order
-            </a>
-        </div>
-    </div>
-</section>
-
+    </section>
+</main>
 <!-- footer section -->
 <footer class="footer_section">
     <div class="container">
@@ -452,8 +313,11 @@
         </div>
     </div>
 </footer>
-
 <!-- end footer section -->
+
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+
 
 </body>
 

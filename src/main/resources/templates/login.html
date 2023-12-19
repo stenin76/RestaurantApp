@@ -98,35 +98,53 @@
 </div>
 <!-- end header section -->
 
-<!-- about section -->
-<section class="about_section layout_padding">
-    <div class="container  ">
-
-        <div class="row">
-            <div class="col-md-6 ">
-                <div class="img-box">
-                    <img src="/images/r1/5424_dce74e1d-dd64-8c9b-7d66-99fbf6f3296c.jpg" alt="">
+<section class="h-100" style="background-color: #eee;">
+    <div class="container h-100 py-5">
+        <section class="book_section layout_padding">
+            <div class="container">
+                <div class="heading_container">
+                    <h2>
+                        Login
+                    </h2>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="detail-box">
-                    <div class="heading_container">
-                        <h2>
-                            Welcome to our Restaurant_1
-                        </h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form_container">
+                            <form th:action="@{/login}"
+                                  th:method="post">
+
+                                <p th:if="${bad_credentials}" class="errors alert alert-danger">
+                                    Invalid username or password.
+                                </p>
+                                <div>
+                                    <small
+                                            class="text-danger"></small>
+                                    <input type="text"
+                                           class="form-control"
+                                           placeholder="Username"
+                                           id="username" name="username"/>
+                                </div>
+                                <div>
+                                    <small
+                                            class="text-danger"></small>
+                                    <input type="password"
+                                           class="form-control"
+                                           placeholder="Password"
+                                           id="password" name="password"/>
+                                </div>
+                                <div class="btn_box">
+                                    <button>
+                                        Login
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <p>
-                        Learn all about our Burger restaurant in Blagoevgrad:
-                        Occupying a prime spot at 13 Street , opposite the main car park, it opened in September 2012.
-
-                        Treat yourself to the best home-made Burgers in Liège!
-                    </p>
                 </div>
             </div>
-        </div>
+        </section>
     </div>
 </section>
-<!-- end about section -->
 
 <!-- footer section -->
 <footer class="footer_section">
@@ -185,10 +203,10 @@
 </footer>
 <!-- end footer section -->
 
+</body>
+
 <script src="/js/popper.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
 
-
-</body>
 
 </html>
