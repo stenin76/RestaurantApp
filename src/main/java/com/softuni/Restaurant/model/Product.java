@@ -3,6 +3,8 @@ package com.softuni.Restaurant.model;
 import com.softuni.Restaurant.model.enums.ProductType;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity {
@@ -13,8 +15,11 @@ public class Product extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column
+    private Integer quantity;
+
     @Column(nullable = false)
-    private Double price;
+    private BigDecimal price;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -23,15 +28,11 @@ public class Product extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProductType productType;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "recipe_id", referencedColumnName = "id")
+    private Recipe recipe;
+
     public Product() {}
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     public String getName() {
         return name;
@@ -49,12 +50,28 @@ public class Product extends BaseEntity {
         this.description = description;
     }
 
-    public Double getPrice() {
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public ProductType getProductType() {
@@ -63,5 +80,13 @@ public class Product extends BaseEntity {
 
     public void setProductType(ProductType productType) {
         this.productType = productType;
+    }
+
+    public Recipe getRecipe() {
+        return recipe;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 }

@@ -6,21 +6,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PageMapController {
 
-    @GetMapping("/about.html")
+    @GetMapping("/about")
     public String about() {
-
-        return "about.html";
+        return "about";
     }
 
-    @GetMapping("/resturant1.html")
+    @GetMapping("/index")
+    public String home() {
+        return "index";
+    }
+
+    @GetMapping("/resturant1")
     public String r1() {
-
-        return "resturant1.html";
+        return "resturant1";
     }
 
-    @GetMapping("/resturant2.html")
+    @GetMapping("/resturant2")
     public String r2() {
-
-        return "resturant2.html";
+        return "resturant2";
     }
+
+
 }

@@ -1,12 +1,18 @@
 package com.softuni.Restaurant.service;
 
-import com.softuni.Restaurant.model.User;
+import com.softuni.Restaurant.model.Role;
+import com.softuni.Restaurant.model.UserEntity;
+import com.softuni.Restaurant.model.dto.ChangeUsernameDto;
 import com.softuni.Restaurant.model.dto.UserRegisterDto;
+import com.softuni.Restaurant.model.enums.UserRoles;
+import com.softuni.Restaurant.repository.RoleRepository;
 import com.softuni.Restaurant.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.softuni.Restaurant.model.enums.UserRoles.USER;
+import java.util.List;
 
 
 @Service
@@ -16,30 +22,51 @@ public class UserService {
 
     private final PasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder encoder) {
+    private final RoleRepository roleRepository;
+
+
+    public UserService(UserRepository userRepository, PasswordEncoder encoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.encoder = encoder;
+        this.roleRepository = roleRepository;
     }
 
     public void registerUser(UserRegisterDto userRegisterDto) {
-        User userToAdd = new User();
+        UserEntity userEntityToAdd = new UserEntity();
+        Role roleToAdd = this.roleRepository.findConditionByUserRoles(UserRoles.USER);
 
-        userToAdd.setUserName(userRegisterDto.getUsername());
-        userToAdd.setEmail(userRegisterDto.getEmail());
-        userToAdd.setPassword(encoder.encode(userRegisterDto.getPassword()));
+        userEntityToAdd.setUserName(userRegisterDto.getUsername());
+        userEntityToAdd.setEmail(userRegisterDto.getEmail());
+        userEntityToAdd.setPassword(encoder.encode(userRegisterDto.getPassword()));
+        userEntityToAdd.getRoles().add(roleToAdd);
 
-        this.userRepository.save(userToAdd);
+        this.userRepository.save(userEntityToAdd);
     }
 
-    public boolean checkCredentials(String username, String password) {
-        User user = this.findByUserName(username);
-        if (user == null) {
-            return false;
-        }
-        return encoder.matches(password, user.getPassword());
+    public void changeUsername(ChangeUsernameDto changeUsernameDto) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity userToChangeName = userRepository.findByUserName(auth.getName()).get();
+
+        userToChangeName.setUserName(changeUsernameDto.getNewUsername());
+        this.userRepository.save(userToChangeName);
     }
-    public User findByUserName(String username) {
+
+    public void addUserRole (Long id) {
+        UserEntity userToAddRole = this.userRepository.findById(id).get();
+
+        userToAddRole.getRoles().add(roleRepository.findConditionByUserRoles(UserRoles.ADMIN));
+        this.userRepository.save(userToAddRole);
+    }
+
+    public UserEntity findByUserName(String username) {
         return userRepository.findByUserName(username).orElse(null);
     }
 
+    public UserEntity findUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public List<UserEntity> getAllUsers () {
+        return userRepository.findAll();
+    }
 }

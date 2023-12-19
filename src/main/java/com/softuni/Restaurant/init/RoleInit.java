@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 public class RoleInit implements CommandLineRunner {
 
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public RoleInit(RoleRepository roleRepository) {

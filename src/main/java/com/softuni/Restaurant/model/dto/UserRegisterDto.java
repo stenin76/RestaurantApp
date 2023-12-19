@@ -14,12 +14,12 @@ public class UserRegisterDto {
     @Email(message = "Must contain '@'.")
     private String email;
 
-    @NotBlank(message = "")
+    @NotBlank(message = "Password cannot be empty!")
     @Size(min = 3, max = 20, message = "Password length must be between 3 and 20 characters!")
     private String password;
 
-    @NotBlank(message = "")
-    @Size(min = 3, max = 20, message = "")
+    @NotBlank(message = "Confirm Password cannot be empty!")
+    @Size(min = 3, max = 20, message = "Confirm Password length must be between 3 and 20 characters!")
     private String confirmPassword;
 
     public UserRegisterDto() {}
